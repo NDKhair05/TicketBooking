@@ -22,8 +22,6 @@ class TicketDetailActivity : AppCompatActivity() {
             TicketDetailScreen(
                 flight = flight,
                 onBackClick = { finish() },
-                onDownloadTicketClick = {
-
                 }
             )
         }
