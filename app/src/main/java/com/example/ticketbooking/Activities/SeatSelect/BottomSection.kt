@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ticketbooking.Activities.Splash.GradientButton
 import com.example.ticketbooking.R
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun BottomSection(
@@ -28,6 +30,8 @@ fun BottomSection(
     onConfirmClick: () -> Unit,
     modifier: Modifier
 ) {
+    val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+    val formattedPrice = formatter.format(totalPrice)
     Column (
         modifier = modifier
             .fillMaxWidth()
@@ -67,7 +71,7 @@ fun BottomSection(
                 )
             }
             Text(
-                text = "$${String.format("%.0f", totalPrice)}",
+                text = formattedPrice,
                 color = colorResource(R.color.orange),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp

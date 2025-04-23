@@ -25,10 +25,14 @@ import coil.compose.AsyncImage
 import com.example.ticketbooking.Activities.SeatSelect.SeatSelectActivity
 import com.example.ticketbooking.Domain.FlightModel
 import com.example.ticketbooking.R
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun FlightItem(item: FlightModel, index: Int) {
     val context = LocalContext.current
+    val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+    val formattedPrice = formatter.format(item.Price)
 
     ConstraintLayout (
         modifier = Modifier
@@ -100,7 +104,7 @@ fun FlightItem(item: FlightModel, index: Int) {
         )
 
         Text(
-            text = "$${String.format("%.2f", item.Price)}",
+            text = formattedPrice,
             fontWeight = FontWeight.SemiBold,
             fontSize = 25.sp,
             color = colorResource(R.color.orange),

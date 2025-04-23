@@ -26,12 +26,16 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.example.ticketbooking.Domain.FlightModel
 import com.example.ticketbooking.R
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun TicketDetailContent(
     flight: FlightModel,
     modifier: Modifier
 ) {
+    val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+    val formattedPrice = formatter.format(flight.Price)
     Column (modifier = modifier
         .padding(24.dp)
         .background(color = colorResource(R.color.lightPurple),
@@ -185,7 +189,7 @@ fun TicketDetailContent(
                 Text(text = flight.AirlineName, color = Color.Black, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Price", color = Color.Black)
-                Text(text = "$${String.format("%.2f", flight.Price)}", color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = formattedPrice, color = Color.Black, fontWeight = FontWeight.Bold)
             }
         }
 
