@@ -20,18 +20,22 @@ import com.example.ticketbooking.R
 fun TicketDetailScreen(
     flight: FlightModel,
     onBackClick: () -> Unit,
+    onConfirmBookingClick: () -> Unit
 ) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(R.color.darkPurple2))
     ) {
-                .verticalScroll(rememberScrollState())
+        Column (modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
+            .background(colorResource(R.color.darkPurple2))
+        ) {
+            ConstraintLayout(modifier = Modifier
                 .fillMaxSize()
                 .background(colorResource(R.color.darkPurple2))
-        ) {
-                    .fillMaxSize()
-                    .background(colorResource(R.color.darkPurple2))
             ) {
                 val (topSection, ticketDetail) = createRefs()
 
@@ -41,11 +45,14 @@ fun TicketDetailScreen(
                     end.linkTo(parent.end)
                 })
 
-                        top.linkTo(parent.top, margin = 110.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                TicketDetailContent(flight = flight, modifier = Modifier.constrainAs(ticketDetail) {
+                    top.linkTo(parent.top, margin = 110.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                })
             }
 
+            GradientButton(onClick = onConfirmBookingClick , text = "Confirm Booking")
         }
     }
 }
