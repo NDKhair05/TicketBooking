@@ -1,7 +1,10 @@
 package com.example.ticketbooking.Domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
+@Parcelize
 data class FlightModel(
     var AirlineLogo: String = "",
     var AirlineName: String = "",
@@ -18,4 +21,5 @@ data class FlightModel(
     var Time: String = "",
     var To: String = "",
     var ToShort: String = ""
-):Serializable
+):Parcelable
+

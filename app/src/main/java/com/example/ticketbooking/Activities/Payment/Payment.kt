@@ -15,12 +15,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.ticketbooking.Domain.FlightModel
 import com.example.ticketbooking.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun PaymentScreen(
+    flight: FlightModel,
     onPaymentSuccess: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -30,7 +32,7 @@ fun PaymentScreen(
     val showSuccessMessage = remember { mutableStateOf(false) } // Track if success message should show
 
     // Số tiền thanh toán
-    val amount = 150000 // đơn vị: VNĐ
+    val amount = flight.Price // đơn vị: VNĐ
 
     // Thông tin Vietcombank
     val bank = "VCB"
@@ -59,7 +61,7 @@ fun PaymentScreen(
                     style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 )
 
-                Text("Số tiền cần thanh toán: ${"%,d".format(amount)} VNĐ")
+                Text("Số tiền cần thanh toán: $amount VNĐ")
 
                 Button(
                     onClick = { showQR.value = true },

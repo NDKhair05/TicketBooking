@@ -17,19 +17,23 @@ class TicketDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val flight = intent.getSerializableExtra("flight") as FlightModel
+        val flight = intent.getParcelableExtra<FlightModel>("flight")
 
         setContent {
             StatusTopBarColor()
 
-            TicketDetailScreen(
-                flight = flight,
-                onBackClick = { finish() },
-                onConfirmBookingClick = {
-                    startActivity(Intent(this,PaymentActivity:: class.java))
-
-                }
-            )
+            if (flight != null) {
+                TicketDetailScreen(
+                    flight = flight,
+                    onBackClick = { finish() },
+                    onConfirmBookingClick = {
+                        val intent = Intent(this, PaymentActivity::class.java).apply {
+                            putExtra("flight", flight)
+                        }
+                        startActivity(intent)
+                    }
+                )
+            }
         }
     }
 }
