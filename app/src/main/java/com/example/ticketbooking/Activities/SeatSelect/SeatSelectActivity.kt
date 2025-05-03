@@ -19,21 +19,23 @@ class SeatSelectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        flight = intent.getSerializableExtra("flight") as FlightModel
+        val flight = intent.getParcelableExtra<FlightModel>("flight")
 
         setContent {
             StatusTopBarColor()
 
-            SeatListScreen(
-                flight = flight,
-                onBackClick = { finish() },
-                onConfirm = {
-                    val intent = Intent(this, TicketDetailActivity::class.java).apply {
-                        putExtra("flight", flight)
+            if (flight != null) {
+                SeatListScreen(
+                    flight = flight,
+                    onBackClick = { finish() },
+                    onConfirm = {
+                        val intent = Intent(this, TicketDetailActivity::class.java).apply {
+                            putExtra("flight", flight)
+                        }
+                        startActivity(intent, null)
                     }
-                    startActivity(intent, null)
-                }
-            )
+                )
+            }
         }
     }
 }

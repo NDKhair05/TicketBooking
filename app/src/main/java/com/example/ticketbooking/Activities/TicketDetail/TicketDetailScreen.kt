@@ -20,7 +20,7 @@ import com.example.ticketbooking.R
 fun TicketDetailScreen(
     flight: FlightModel,
     onBackClick: () -> Unit,
-    onDownloadTicketClick: () -> Unit
+    onConfirmBookingClick: () -> Unit
 ) {
 
     Box(
@@ -52,7 +52,7 @@ fun TicketDetailScreen(
                 })
             }
 
-            GradientButton(onClick = { }, text = "Download Ticket")
+            GradientButton(onClick = onConfirmBookingClick , text = "Confirm Booking")
         }
     }
 }

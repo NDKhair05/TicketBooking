@@ -1,4 +1,7 @@
 pluginManagement {
+    plugins {
+        id("org.jetbrains.kotlin.plugin.parcelize") version "2.0.0"
+    }
     repositories {
         google {
             content {
