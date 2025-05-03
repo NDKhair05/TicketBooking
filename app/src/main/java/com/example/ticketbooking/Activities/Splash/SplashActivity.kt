@@ -64,64 +64,6 @@ class SplashActivity : AppCompatActivity() {
     }
 }
 
-@Composable
-fun LoginScreen(onLoginClick: () -> Unit = {}, onRegisterClick: () -> Unit = {}) {
-    val context = LocalContext.current
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.darkPurple2))
-            .padding(32.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        YellowTitle("Login")
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        CustomTextField(value = email, onValueChange = { email = it }, placeholder = "Email")
-        Spacer(modifier = Modifier.height(16.dp))
-        CustomTextField(value = password, onValueChange = { password = it }, placeholder = "Password", isPassword = true)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        GradientButton(onClick = onLoginClick, text = "Login")
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Don't have an account? Register",
-            color = Color.White,
-            modifier = Modifier.clickable { onRegisterClick() }
-        )
-    }
-}
-
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    isPassword: Boolean = false
-) {
-    val visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
-
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(text = placeholder, color = Color.Gray) },
-        visualTransformation = visualTransformation,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(10.dp)),
-        shape = RoundedCornerShape(10.dp),
-        singleLine = true
-    )
-}
-
-
 @Preview
 @Composable
 fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
