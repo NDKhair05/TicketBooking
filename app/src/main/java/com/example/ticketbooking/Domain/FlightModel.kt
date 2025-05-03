@@ -12,6 +12,7 @@ data class FlightModel(
     var FromShort: String = "",
     var NumberSeat: Int = 0,
     var Price: Double = 0.0,
+    var TotalPrice: Double = 0.0,
     var Passenger: String = "",
     var Seats: String = "",
     var ReservedSeats: String = "",

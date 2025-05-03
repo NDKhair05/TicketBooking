@@ -35,7 +35,7 @@ fun TicketDetailContent(
     modifier: Modifier
 ) {
     val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-    val formattedPrice = formatter.format(flight.Price)
+    val formattedPrice = formatter.format(flight.TotalPrice)
     Column (modifier = modifier
         .padding(24.dp)
         .background(color = colorResource(R.color.lightPurple),

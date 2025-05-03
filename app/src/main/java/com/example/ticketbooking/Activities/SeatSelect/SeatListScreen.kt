@@ -10,7 +10,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -62,14 +64,37 @@ fun SeatListScreen(
         totalPrice = seatCount * flight.Price
     }
 
-    ConstraintLayout (
+    fun onSeatClick(index: Int) {
+        val seat = seatList[index]
+        val updatedSeat = seat.copy(
+            status = when (seat.status) {
+                SeatStatus.AVAILABLE -> SeatStatus.SELECTED
+                SeatStatus.SELECTED -> SeatStatus.AVAILABLE
+                else -> seat.status
+            }
+        )
+        val updatedSeatList = seatList.toMutableList()
+        updatedSeatList[index] = updatedSeat
+        seatList = updatedSeatList
+
+        if (updatedSeat.status == SeatStatus.SELECTED) {
+            selectedSeatNames.add(updatedSeat.name)
+        } else if (updatedSeat.status == SeatStatus.AVAILABLE) {
+            selectedSeatNames.remove(updatedSeat.name)
+        }
+
+        updatePriceAndCount()
+    }
+
+
+    ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(color = colorResource(R.color.darkPurple2))
     ) {
         val (topSection, middleSection, bottomSection) = createRefs()
 
-        //top section
+        // Phần đầu màn hình
         TopSection(
             modifier = Modifier
                 .constrainAs(topSection) {
@@ -80,7 +105,7 @@ fun SeatListScreen(
             onBackClick = onBackClick
         )
 
-        //middle section
+        // Phần giữa màn hình
         ConstraintLayout(
             modifier = Modifier
                 .padding(top = 100.dp)
@@ -111,40 +136,26 @@ fun SeatListScreen(
                         end.linkTo(airplane.end)
                     }
             ) {
-                items(seatList.size) {index ->
+                items(seatList.size) { index ->
                     val seat = seatList[index]
 
                     SeatItem(
                         seat = seat,
-                        onSeatClick = {
-                            when(seat.status) {
-                                SeatStatus.AVAILABLE -> {
-                                    seat.status = SeatStatus.SELECTED
-                                    selectedSeatNames.add(seat.name)
-                                }
-                                SeatStatus.SELECTED -> {
-                                    seat.status = SeatStatus.AVAILABLE
-                                    selectedSeatNames.remove(seat.name)
-                                } else -> {
-
-                                }
-                            }
-                            updatePriceAndCount()
-                        }
+                        onSeatClick = { onSeatClick(index) }
                     )
                 }
             }
         }
 
-        //bottom section
+        // Phần dưới màn hình
         BottomSection(
             seatCount = seatCount,
-            selectedSeats = selectedSeatNames.joinToString (",") ,
+            selectedSeats = selectedSeatNames.joinToString(","),
             totalPrice = totalPrice,
             onConfirmClick = {
-                if(seatCount > 0) {
-                    flight.Passenger = selectedSeatNames.joinToString (",")
-                    flight.Price = totalPrice
+                if (seatCount > 0) {
+                    flight.Passenger = selectedSeatNames.joinToString(",")
+                    flight.TotalPrice = totalPrice
                     onConfirm(flight)
                 } else {
                     Toast.makeText(context, "Please select your seat", Toast.LENGTH_SHORT).show()

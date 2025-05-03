@@ -58,13 +58,13 @@ fun BottomSection(
         ) {
             Column {
                 Text(
-                    text = if(selectedSeats.isBlank()) "-" else selectedSeats,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                text = "$seatCount Seat Selected",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp
                 )
                 Text(
-                    text = "$seatCount Seat Selected",
+                    text = if(selectedSeats.isBlank()) "-" else selectedSeats,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
