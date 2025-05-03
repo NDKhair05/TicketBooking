@@ -32,7 +32,7 @@ fun PaymentScreen(
     val showSuccessMessage = remember { mutableStateOf(false) } // Track if success message should show
 
     // Số tiền thanh toán
-    val amount = flight.Price // đơn vị: VNĐ
+    val amount = flight.TotalPrice // đơn vị: VNĐ
 
     // Thông tin Vietcombank
     val bank = "VCB"
