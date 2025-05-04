@@ -26,7 +26,7 @@ import com.example.ticketbooking.R
 fun GradientButton(
     onClick: () -> Unit = {},
     text: String = "Get Started",
-    padding: Int = 0
+    padding: Int = 0,
 ) {
     Button(
         onClick = onClick,
