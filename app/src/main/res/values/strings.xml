@@ -2,4 +2,8 @@
     <string name="app_name">Ticket Booking</string>
     <string name="subtitle_splash">Find an easy way to buy airplane tickets with just a few clicks in the application</string>
     <string name="dashboard_title">Let\'s explore the world \n with us!</string>
+    <string name="sign_in_title">Login</string>
+    <string name="sign_up_title">Register</string>
+    <string name="sign_up_link">If you do not have an account, please register.</string>
+    <string name="sign_in_link">You had an account? Please login!</string>
 </resources>
