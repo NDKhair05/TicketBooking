@@ -44,6 +44,7 @@ import com.example.ticketbooking.Activities.Splash.GradientButton
 import com.example.ticketbooking.Activities.Splash.StatusTopBarColor
 import com.example.ticketbooking.Domain.LocationModel
 import com.example.ticketbooking.R
+import com.example.ticketbooking.Utils.UserPreferences
 import com.example.ticketbooking.ViewModel.MainViewModel
 
 class DashboardActivity : AppCompatActivity() {
@@ -69,6 +70,9 @@ fun MainScreen() {
     var childrenPassenger:String = ""
     val context = LocalContext.current
 
+    val userPreferences = UserPreferences(context)
+    val currentUser = userPreferences.getUser()
+
     StatusTopBarColor()
 
     LaunchedEffect(Unit) {
@@ -88,7 +92,10 @@ fun MainScreen() {
                 .background(color = colorResource(R.color.darkPurple2))
                 .padding(paddingValues = paddingValues)
         ) {
-            item { TopBar() }
+            item { currentUser?.let {
+                val fullName = it.fullName
+                TopBar(fullName)
+            } }
             item {
                 Column(
                     modifier = Modifier

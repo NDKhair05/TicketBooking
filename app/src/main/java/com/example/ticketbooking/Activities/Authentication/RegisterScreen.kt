@@ -1,6 +1,7 @@
 package com.example.ticketbooking.Activities.Register
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -15,6 +16,7 @@ import androidx.compose.material.*
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,16 +37,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ticketbooking.Activities.Authentication.RegisterActivity
 import com.example.ticketbooking.Activities.Splash.GradientButton
 import com.example.ticketbooking.Activities.Splash.SplashActivity
 import com.example.ticketbooking.Activities.Splash.StatusTopBarColor
 import com.example.ticketbooking.R
+import com.example.ticketbooking.ViewModel.AuthViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 @Preview
 fun RegisterScreen(onRegisterSuccess: () -> Unit = {}) {
+    val viewModel: AuthViewModel = viewModel()
+    val authResult by viewModel.authResult.observeAsState()
+
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -180,11 +187,23 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}) {
             ) {
                 GradientButton(
                     onClick = {
-                        onRegisterSuccess()
+                        if(fullName.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                            Toast.makeText(context, "Try again", Toast.LENGTH_SHORT).show()
+                        } else {
+                            viewModel.register(fullName, email, password)
+                        }
                     },
                     text = stringResource(R.string.sign_up_title),
                 )
-
+                authResult?.let { (success, message) ->
+                    if (success) {
+                        Toast.makeText(context, "Regis successful", Toast.LENGTH_SHORT).show()
+                        onRegisterSuccess()
+                    } else {
+                        Toast.makeText(context, message ?: "Regis failed", Toast.LENGTH_SHORT).show()
+                    }
+                    viewModel.resetAuthResult()
+                }
             }
 
         }

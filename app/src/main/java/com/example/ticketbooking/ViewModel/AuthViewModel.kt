@@ -9,8 +9,8 @@ import com.google.firebase.auth.FirebaseUser
 class AuthViewModel : ViewModel() {
     private val repository = AuthRepository()
 
-    private val _authResult = MutableLiveData<Pair<Boolean, String?>>()
-    val authResult: LiveData<Pair<Boolean, String?>> get() = _authResult
+    private val _authResult = MutableLiveData<Pair<Boolean, String?>?>()
+    val authResult: LiveData<Pair<Boolean, String?>?> = _authResult
 
     fun register(fullName: String, email: String, password: String) {
         repository.registerUser(fullName, email, password) { success, message ->
@@ -25,4 +25,8 @@ class AuthViewModel : ViewModel() {
     }
 
     fun getCurrentUser(): FirebaseUser? = repository.getCurrentUser()
+
+    fun resetAuthResult() {
+        _authResult.value = null
+    }
 }

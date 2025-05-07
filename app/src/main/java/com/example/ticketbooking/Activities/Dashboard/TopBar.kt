@@ -20,8 +20,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.ticketbooking.R
 
 @Composable
-@Preview
-fun TopBar() {
+fun TopBar(fullName: String ) {
     ConstraintLayout(
         modifier = Modifier
             .padding(horizontal = 32.dp)
@@ -65,7 +64,7 @@ fun TopBar() {
         )
 
         Text(
-            text = "Nguyễn Đắc Khải",
+            text = fullName,
             color = Color.White,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
