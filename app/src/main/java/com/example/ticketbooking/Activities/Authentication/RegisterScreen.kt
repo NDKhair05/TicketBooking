@@ -28,6 +28,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -118,25 +119,36 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}) {
                             .padding(vertical = 4.dp),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                     )
+                    var passwordVisible by remember { mutableStateOf(false) }
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
                         label = { Text("Password") },
-                        visualTransformation = PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
-                    )
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val image = if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(painter = painterResource(id = image), contentDescription = null)
+                            }
+                        },
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+                        )
+                        var confirmPasswordVisible by remember { mutableStateOf(false) }
                     OutlinedTextField(
                         value = confirmPassword,
                         onValueChange = { confirmPassword = it },
                         label = { Text("Confirm Password") },
-                        visualTransformation = PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
+                        visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val image = if (confirmPasswordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                            IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
+                                Icon(painter = painterResource(id = image), contentDescription = null)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+
                     )
 
                     Text(

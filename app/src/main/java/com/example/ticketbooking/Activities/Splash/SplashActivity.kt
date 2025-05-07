@@ -47,10 +47,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.ticketbooking.Activities.Authentication.RegisterActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -175,16 +178,20 @@ fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp)
                             )
-
+                            var passwordVisible by remember { mutableStateOf(false) }
                             OutlinedTextField(
                                 value = password,
                                 onValueChange = { password = it },
                                 label = { Text("Password") },
-                                visualTransformation = PasswordVisualTransformation(),
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp)
+                                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                trailingIcon = {
+                                    val image = if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                        Icon(painter = painterResource(id = image), contentDescription = null)
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                             )
 
                             Text(
