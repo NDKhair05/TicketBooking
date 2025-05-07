@@ -3,6 +3,7 @@ package com.example.ticketbooking.Activities.Splash
 import androidx.compose.ui.Modifier
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -47,11 +48,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ticketbooking.Activities.Authentication.RegisterActivity
+import com.example.ticketbooking.ViewModel.AuthViewModel
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +71,9 @@ class SplashActivity : AppCompatActivity() {
 @Composable
 @Preview
 fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
+    val viewModel: AuthViewModel = viewModel()
+    val authResult by viewModel.authResult.observeAsState()
+
     var showLoginForm by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -217,8 +224,11 @@ fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
                     GradientButton(
                         onClick = {
                             if (showLoginForm) {
-                                // Gọi onGetStartedClick khi nút "Continue" được nhấn
-                                onGetStartedClick()
+                                if(email.isBlank() || password.isBlank()) {
+                                    Toast.makeText(context, "Try again", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    viewModel.login(email, password)
+                                }
                             } else {
                                 // Hiển thị form đăng nhập khi nút "Log in" được nhấn
                                 showLoginForm = true
@@ -226,6 +236,15 @@ fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
                         },
                         text = if (!showLoginForm) stringResource(R.string.sign_in_title) else "Continue",
                     )
+
+                    authResult?.let { (success, message) ->
+                        if(success) {
+                            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                            onGetStartedClick()
+                        } else {
+                            Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
             }
         }
