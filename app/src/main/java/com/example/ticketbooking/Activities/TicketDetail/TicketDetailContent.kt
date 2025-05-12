@@ -25,32 +25,35 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.example.ticketbooking.Domain.FlightModel
+import com.example.ticketbooking.Domain.FlightsBookingModel
 import com.example.ticketbooking.R
 import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
 fun TicketDetailContent(
-    flight: FlightModel,
-    modifier: Modifier
+    passengerName: String,
+    seatNumber: String,
+    booking: FlightsBookingModel,
 ) {
     val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-    val formattedPrice = formatter.format(flight.TotalPrice)
-    Column (modifier = modifier
+    val totalPrice = booking.flight.TotalPrice
+    val formattedPrice = formatter.format(totalPrice)
+    Column (modifier = Modifier
         .padding(24.dp)
         .background(color = colorResource(R.color.lightPurple),
             shape = RoundedCornerShape(20.dp)
         )
     ) {
         ConstraintLayout (
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
             val (logo, arrivalTxt, lineImg, fromTxt, fromShortTxt, toTxt, toShortTxt) = createRefs()
 
             AsyncImage(
-                model = flight.AirlineLogo,
+                model = booking.flight.AirlineLogo,
                 contentDescription = null,
                 modifier = Modifier
                     .size(200.dp, 50.dp)
@@ -62,7 +65,7 @@ fun TicketDetailContent(
                 contentScale = ContentScale.Fit
             )
             Text(
-                text = flight.ArriveTime,
+                text = "",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(R.color.darkPurple),
@@ -94,7 +97,7 @@ fun TicketDetailContent(
             )
 
             Text(
-                text = flight.FromShort,
+                text = booking.flight.FromShort,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -118,7 +121,7 @@ fun TicketDetailContent(
             )
 
             Text(
-                text = flight.ToShort,
+                text = booking.flight.ToShort,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -140,21 +143,23 @@ fun TicketDetailContent(
                      .weight(0.5f)
              ){
                  Text(text = "From", color = Color.Black)
-                 Text(text = flight.From, color = Color.Black, fontWeight = FontWeight.Bold)
+                 Text(text = booking.flight.From, color = Color.Black, fontWeight = FontWeight.Bold)
                  Spacer(modifier = Modifier.height(16.dp))
                  Text(text = "Date", color = Color.Black)
-                 Text(text = flight.Date, color = Color.Black, fontWeight = FontWeight.Bold)
+                 Text(text = booking.flight.Date, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 22.sp)
              }
+
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column (
                 modifier = Modifier
                     .weight(0.5f)
             ){
                 Text(text = "To", color = Color.Black)
-                Text(text = flight.To, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = booking.flight.To, color = Color.Black, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Time", color = Color.Black)
-                Text(text = flight.Time, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = booking.flight.DepartureTime, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 22.sp)
             }
         }
 
@@ -174,32 +179,21 @@ fun TicketDetailContent(
                 modifier = Modifier
                     .weight(0.5f)
             ){
-                Text(text = "Class", color = Color.Black)
-                Text(text = flight.ClassSeat, color = Color.Black, fontWeight = FontWeight.Bold)
+                Text(text = "Full Name", color = Color.Black)
+                Text(text = passengerName, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Seats", color = Color.Black)
-                Text(text = flight.Seats, color = Color.Black, fontWeight = FontWeight.Bold)
-            }
-
-            Column (
-                modifier = Modifier
-                    .weight(0.5f)
-            ){
-                Text(text = "Airlines", color = Color.Black)
-                Text(text = flight.AirlineName, color = Color.Black, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Price", color = Color.Black)
-                Text(text = formattedPrice, color = Color.Black, fontWeight = FontWeight.Bold)
+                Row {
+                    Text(text = "Seat", color = Color.Black)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(text = seatNumber, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(text = "Airlines", color = Color.Black)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(text = booking.flight.AirlineName, color = Color.Black, fontWeight = FontWeight.Bold)
+                }
             }
         }
-
-        Image(
-            painter = painterResource(R.drawable.qrcode),
-            contentDescription = null,
-            modifier = Modifier
-                .size(50.dp)
-                .padding(start = 8.dp),
-        )
+        
 
         Image(
             painter = painterResource(R.drawable.dash_line),

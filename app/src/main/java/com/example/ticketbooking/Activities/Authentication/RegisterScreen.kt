@@ -79,6 +79,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
+                    .padding(top = 20.dp, start = 15.dp)
 
             )
 
@@ -115,7 +116,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                     )
                     OutlinedTextField(
                         value = email,
@@ -124,7 +125,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                     )
                     var passwordVisible by remember { mutableStateOf(false) }
                     OutlinedTextField(

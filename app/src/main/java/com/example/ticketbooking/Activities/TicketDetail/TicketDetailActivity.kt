@@ -7,31 +7,34 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.ticketbooking.Activities.Dashboard.DashboardActivity
 import com.example.ticketbooking.Activities.Payment.PaymentActivity
 import com.example.ticketbooking.Activities.Splash.StatusTopBarColor
 import com.example.ticketbooking.Domain.FlightModel
+import com.example.ticketbooking.Domain.FlightsBookingModel
 import com.example.ticketbooking.R
+import com.example.ticketbooking.ViewModel.FlightBookingViewModel
 
 class TicketDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val flight = intent.getParcelableExtra<FlightModel>("flight")
+        val booking = intent.getParcelableExtra<FlightsBookingModel>("booking")
+        val flightBookingViewModel = FlightBookingViewModel()
 
         setContent {
             StatusTopBarColor()
 
-            if (flight != null) {
+            if (booking != null) {
                 TicketDetailScreen(
-                    flight = flight,
+                    booking = booking,
                     onBackClick = { finish() },
                     onConfirmBookingClick = {
                         val intent = Intent(this, PaymentActivity::class.java).apply {
-                            putExtra("flight", flight)
+                            putExtra("flight", booking.flight)
                         }
                         startActivity(intent)
-                    }
+                    },
+                    flightBookingViewModel = flightBookingViewModel
                 )
             }
         }

@@ -78,4 +78,5 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
     implementation("androidx.compose.ui:ui:1.5.4")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
 }

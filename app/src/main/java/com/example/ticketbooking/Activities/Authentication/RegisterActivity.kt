@@ -7,8 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.ticketbooking.Activities.Dashboard.DashboardActivity
 import com.example.ticketbooking.Activities.Register.RegisterScreen
+import com.example.ticketbooking.Activities.Splash.SplashActivity
 import com.example.ticketbooking.Activities.Splash.StatusTopBarColor
 import com.example.ticketbooking.R
 
@@ -20,7 +20,7 @@ class RegisterActivity : AppCompatActivity() {
             StatusTopBarColor()
             RegisterScreen(
                 onRegisterSuccess = {
-                    startActivity(Intent(this, DashboardActivity::class.java))
+                    startActivity(Intent(this, SplashActivity::class.java))
                     finish()
                 }
             )

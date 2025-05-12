@@ -25,6 +25,7 @@ import java.util.Locale
 @Composable
 fun BottomSection(
     seatCount: Int,
+    seatHaveToSelected: Int,
     selectedSeats: String,
     totalPrice: Double,
     onConfirmClick: () -> Unit,
@@ -58,7 +59,7 @@ fun BottomSection(
         ) {
             Column {
                 Text(
-                text = "$seatCount Seat Selected",
+                text = "$seatCount / $seatHaveToSelected Seat Selected",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp

@@ -3,11 +3,14 @@ package com.example.ticketbooking.Activities.Dashboard
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -26,34 +29,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ticketbooking.Domain.LocationModel
 import com.example.ticketbooking.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownList(
-    items: List<String>,
-    loadingIcon:Painter,
+    locations: List<LocationModel>,
+    loadingIcon: Painter,
     hint: String = "",
     showLocationLoading: Boolean,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (LocationModel) -> Unit
 ) {
-    var selectedItem by remember { mutableStateOf("") }
+    var searchText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+    var filteredLocations by remember { mutableStateOf<List<LocationModel>>(emptyList()) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {expanded=!expanded}
-    ) {
-        if(showLocationLoading) {
+    Column {
+        if (showLocationLoading) {
             Box(
                 modifier = Modifier
-                    .padding(top=8.dp)
+                    .padding(top = 8.dp)
                     .fillMaxWidth()
                     .background(
                         colorResource(R.color.lightPurple),
@@ -66,14 +71,13 @@ fun DropDownList(
             }
         } else {
             OutlinedTextField(
-                value = selectedItem,
-                onValueChange = {selectedItem=it},
-                readOnly = true,
+                value = searchText,
+                onValueChange = { searchText = it },
+                singleLine = true,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp))
-                    .menuAnchor(),
+                    .clip(RoundedCornerShape(10.dp)),
                 placeholder = {
                     Text(
                         text = hint,
@@ -93,36 +97,50 @@ fun DropDownList(
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
                     containerColor = colorResource(R.color.lightPurple)
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        filteredLocations = locations.filter {
+                            it.Name.contains(searchText, ignoreCase = true) ||
+                                    it.Airport.contains(searchText, ignoreCase = true) ||
+                                    it.IATA.contains(searchText, ignoreCase = true)
+                        }
+                        expanded = true
+                    }
                 )
             )
+
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = {expanded=false}
+                onDismissRequest = { expanded = false }
             ) {
-                items.forEach { item ->
-
+                if (filteredLocations.isEmpty()) {
                     DropdownMenuItem(
-                        text={
-                            Row (
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text =  item,
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 16.sp
-                                )
-                            }
-                        },
-                        onClick = {
-                            selectedItem = item
-                            expanded = false
-                            onItemSelected(item)
-                        }
+                        text = { Text("No results found") },
+                        onClick = { expanded = false }
                     )
+                } else {
+                    filteredLocations.forEach { location ->
+                        DropdownMenuItem(
+                            text = {
+                                Column {
+                                    Text(location.Name, fontWeight = FontWeight.Bold)
+                                    Text("${location.Airport} - ${location.IATA}", fontSize = 12.sp, color = Color.Gray)
+                                }
+                            },
+                            onClick = {
+                                searchText = location.Name
+                                expanded = false
+                                onItemSelected(location)
+                            }
+                        )
+                    }
                 }
             }
         }
     }
 }
-

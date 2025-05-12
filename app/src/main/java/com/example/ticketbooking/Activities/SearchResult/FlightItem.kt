@@ -29,7 +29,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun FlightItem(item: FlightModel, index: Int) {
+fun FlightItem(item: FlightModel, index: Int, numPassenger: Int,numAdultPassenger: Int, numKidPassenger: Int,) {
     val context = LocalContext.current
     val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
     val formattedPrice = formatter.format(item.Price)
@@ -41,6 +41,9 @@ fun FlightItem(item: FlightModel, index: Int) {
             .clickable {
                 val intent = Intent(context, SeatSelectActivity::class.java).apply {
                     putExtra("flight", item)
+                    putExtra("numPassenger", numPassenger)
+                    putExtra("numAdultPassenger", numAdultPassenger)
+                    putExtra("numKidPassenger", numKidPassenger)
                 }
                 startActivity(context, intent, null)
             }
@@ -49,14 +52,15 @@ fun FlightItem(item: FlightModel, index: Int) {
                 shape = RoundedCornerShape(15.dp)
             )
     ) {
-        val (logo, timeTxt, airplaneIcon, dashLine, priceTxt, seatIcon, classTxt, fromTxt, fromShortTxt,
+        val (logo, depTimeTxt, desTimeTxt, airplaneIcon, dashLine, priceTxt, seatIcon, classTxt, fromTxt, fromShortTxt,
         toTxt, toShortTxt) = createRefs()
 
         AsyncImage(
             model = item.AirlineLogo,
             contentDescription = null,
             modifier = Modifier
-                .size(200.dp, 50.dp)
+                .padding(top = 5.dp)
+                .size(250.dp, 50.dp)
                 .constrainAs(logo) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
@@ -65,15 +69,30 @@ fun FlightItem(item: FlightModel, index: Int) {
         )
 
         Text(
-            text = item.ArriveTime,
+            text = item.DepartureTime,
             textAlign = TextAlign.Center,
-            fontSize = 12.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(R.color.darkPurple2),
             modifier = Modifier
                 .padding(8.dp)
-                .constrainAs(timeTxt) {
+                .padding(start = 16.dp)
+                .constrainAs(depTimeTxt) {
                     start.linkTo(parent.start)
+                    top.linkTo(logo.bottom)
+                }
+        )
+
+        Text(
+            text = item.DestinationTime,
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(R.color.darkPurple2),
+            modifier = Modifier
+                .padding(8.dp)
+                .padding(end = 16.dp)
+                .constrainAs(desTimeTxt) {
                     top.linkTo(logo.bottom)
                     end.linkTo(parent.end)
                 }
@@ -86,7 +105,7 @@ fun FlightItem(item: FlightModel, index: Int) {
                 .padding(top = 8.dp)
                 .constrainAs(airplaneIcon) {
                     start.linkTo(parent.start)
-                    top.linkTo(timeTxt.bottom)
+                    top.linkTo(depTimeTxt.bottom)
                     end.linkTo(parent.end)
                 }
         )
@@ -150,7 +169,7 @@ fun FlightItem(item: FlightModel, index: Int) {
             modifier = Modifier
                 .padding(start = 16.dp)
                 .constrainAs(fromTxt) {
-                    top.linkTo(timeTxt.bottom)
+                    top.linkTo(desTimeTxt.bottom)
                     start.linkTo(parent.start)
                 }
         )
@@ -161,7 +180,7 @@ fun FlightItem(item: FlightModel, index: Int) {
             fontWeight = FontWeight.SemiBold,
             color = Color.Black,
             modifier = Modifier
-                .padding(start = 16.dp)
+                .padding(start = 16.dp, top = 8.dp)
                 .constrainAs(fromShortTxt) {
                     top.linkTo(fromTxt.bottom)
                     start.linkTo(fromTxt.start)
@@ -177,7 +196,7 @@ fun FlightItem(item: FlightModel, index: Int) {
             modifier = Modifier
                 .padding(end = 16.dp)
                 .constrainAs(toTxt) {
-                    top.linkTo(timeTxt.bottom)
+                    top.linkTo(depTimeTxt.bottom)
                     end.linkTo(parent.end)
                 }
         )
@@ -188,6 +207,7 @@ fun FlightItem(item: FlightModel, index: Int) {
             fontWeight = FontWeight.SemiBold,
             color = Color.Black,
             modifier = Modifier
+                .padding(top = 8.dp)
                 .constrainAs(toShortTxt) {
                     top.linkTo(toTxt.bottom)
                     start.linkTo(toTxt.start)

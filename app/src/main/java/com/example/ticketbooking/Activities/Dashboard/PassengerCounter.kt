@@ -33,15 +33,16 @@ import com.example.ticketbooking.R
 @Composable
 fun PassengerCounter(
     title: String,
+    minPassenger: Int,
     modifier: Modifier = Modifier,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (Int) -> Unit
 ) {
-    var passengerCount by remember { mutableStateOf(1) }
+    var passengerCount by remember { mutableStateOf(0) }
 
     Box(
         modifier = modifier
             .height(60.dp)
-            .padding(top=8.dp)
+            .padding(top = 8.dp)
             .background(
                 color = colorResource(R.color.lightPurple),
                 shape = RoundedCornerShape(10.dp)
@@ -67,9 +68,9 @@ fun PassengerCounter(
                     .weight(1f)
                     .fillMaxHeight()
                     .clickable {
-                        if(passengerCount>1) {
+                        if (passengerCount+minPassenger > minPassenger) {
                             passengerCount--
-                            onItemSelected(passengerCount.toString())
+                            onItemSelected(passengerCount+minPassenger)
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -84,10 +85,10 @@ fun PassengerCounter(
 
             //passenger count
             Text(
-                text = "$passengerCount $title",
+                text = "${passengerCount + minPassenger} $title",
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
 
@@ -98,7 +99,7 @@ fun PassengerCounter(
                     .fillMaxHeight()
                     .clickable {
                         passengerCount++
-                        onItemSelected(passengerCount.toString())
+                        onItemSelected(passengerCount+minPassenger)
                     },
                 contentAlignment = Alignment.Center
             ) {

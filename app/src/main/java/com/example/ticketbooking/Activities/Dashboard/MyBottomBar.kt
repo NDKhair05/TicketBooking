@@ -1,6 +1,12 @@
 package com.example.ticketbooking.Activities.Dashboard
 
+import android.content.Intent
 import android.widget.Toast
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomAppBar
@@ -19,6 +25,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavController
 import com.example.ticketbooking.R
 
 data class BottomMenuItem (
@@ -37,38 +45,38 @@ fun prepareButtonMenu(): List<BottomMenuItem> {
 }
 
 @Composable
-@Preview
-fun MyBottomBar() {
+fun MyBottomBar(navController: NavController, selectedItem: String, onItemSelected: (String) -> Unit) {
     val bottomMenuItemsList = prepareButtonMenu()
-    val context = LocalContext.current
-    var selectedItem by remember{ mutableStateOf("Home") }
 
     BottomAppBar(
         backgroundColor = colorResource(R.color.purple),
-        elevation = 3.dp
+        elevation = 3.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
     ) {
-        bottomMenuItemsList.forEach {bottomMenuItem ->
+        bottomMenuItemsList.forEach { item ->
             BottomNavigationItem(
-                selected = (selectedItem==bottomMenuItem.label),
+                selected = (selectedItem == item.label),
                 onClick = {
-                    selectedItem = bottomMenuItem.label
-                    if (bottomMenuItem.label == "Cart") {
-
-                    } else {
-                        Toast.makeText(context, bottomMenuItem.label, Toast.LENGTH_SHORT).show()
+                    onItemSelected(item.label)
+                    navController.navigate(item.label) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
                     }
-                }, icon = {
+                },
+                icon = {
                     Icon(
-                        painter = bottomMenuItem.icon,
+                        painter = item.icon,
                         contentDescription = null,
                         tint = colorResource(R.color.orange),
                         modifier = Modifier
-                            .padding(top=8.dp)
+                            .padding(top = 8.dp)
                             .size(20.dp)
                     )
                 }
             )
         }
     }
-
 }

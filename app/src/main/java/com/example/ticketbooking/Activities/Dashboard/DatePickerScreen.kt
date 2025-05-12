@@ -11,6 +11,7 @@ import android.icu.util.Calendar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,13 +31,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ticketbooking.R
 import java.util.Locale
 
 @Composable
 fun DatePickerScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val dateFormat = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())  }
+    val dateFormat = remember { SimpleDateFormat("dd / MM / yyyy", Locale.getDefault())  }
 
     val departureCalendar = remember { Calendar.getInstance() }
     val returnCalendar = remember { Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, 1) } }
@@ -102,11 +104,12 @@ fun DatePickerItem(
         Text(
             text = dateText,
             modifier = Modifier
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 5.dp)
                 .fillMaxWidth(),
             color = Color.Black,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = 12.sp
         )
     }
 }

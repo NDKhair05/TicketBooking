@@ -12,45 +12,44 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketBooking"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Activities.PassengerInfo.PassengerInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Profile.ProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".Activities.Authentication.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.TicketDetail.TicketDetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.Payment.PaymentActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.SeatSelect.SeatSelectActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.SearchResult.SearchResultActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.Dashboard.DashboardActivity"
             android:exported="false" />
-
         <activity
             android:name=".Activities.Splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.TicketBooking" />
-
     </application>
 
 </manifest>

@@ -33,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.example.ticketbooking.Activities.Dashboard.DashboardActivity
 import com.example.ticketbooking.R
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import androidx.compose.material.OutlinedTextField
@@ -59,6 +58,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ticketbooking.Activities.Authentication.RegisterActivity
 import com.example.ticketbooking.Domain.UserModel
+import com.example.ticketbooking.MainActivity
 import com.example.ticketbooking.Utils.UserPreferences
 import com.example.ticketbooking.ViewModel.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -73,7 +73,7 @@ class SplashActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             SplashScreen(onGetStartedClick = {
-                startActivity(Intent(this,DashboardActivity:: class.java))
+                startActivity(Intent(this,MainActivity:: class.java))
             })
         }
     }
@@ -263,7 +263,7 @@ fun SplashScreen(onGetStartedClick: () -> Unit = {}) {
                                         userPreferences.saveUser(user) // Lưu toàn bộ dữ liệu người dùng
 
                                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
-                                        onGetStartedClick() // Chuyển sang màn hình tiếp theo
+                                        onGetStartedClick()
                                     } else {
                                         Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show()
                                     }

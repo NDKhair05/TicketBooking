@@ -4,10 +4,14 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -40,6 +44,7 @@ data class Seat(
 @Composable
 fun SeatListScreen(
     flight: FlightModel,
+    passengerCount: Int,
     onBackClick: () -> Unit,
     onConfirm: (FlightModel) -> Unit
 ) {
@@ -66,6 +71,13 @@ fun SeatListScreen(
 
     fun onSeatClick(index: Int) {
         val seat = seatList[index]
+
+        // Nếu đã đủ ghế và người dùng đang cố chọn thêm thì bỏ qua
+        if (seat.status == SeatStatus.AVAILABLE && selectedSeatNames.size >= passengerCount) {
+            Toast.makeText(context, "You have selected all seats", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val updatedSeat = seat.copy(
             status = when (seat.status) {
                 SeatStatus.AVAILABLE -> SeatStatus.SELECTED
@@ -73,6 +85,7 @@ fun SeatListScreen(
                 else -> seat.status
             }
         )
+
         val updatedSeatList = seatList.toMutableList()
         updatedSeatList[index] = updatedSeat
         seatList = updatedSeatList
@@ -125,8 +138,12 @@ fun SeatListScreen(
                     end.linkTo(parent.end)
                 }
             )
+
+            val seatScrollState = rememberLazyGridState()
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(7),
+                state = seatScrollState,
                 modifier = Modifier
                     .padding(top = 200.dp)
                     .padding(horizontal = 64.dp)
@@ -134,7 +151,8 @@ fun SeatListScreen(
                         top.linkTo(parent.top)
                         start.linkTo(airplane.start)
                         end.linkTo(airplane.end)
-                    }
+                     }
+                    .height(300.dp)
             ) {
                 items(seatList.size) { index ->
                     val seat = seatList[index]
@@ -150,13 +168,18 @@ fun SeatListScreen(
         // Phần dưới màn hình
         BottomSection(
             seatCount = seatCount,
+            seatHaveToSelected = passengerCount,
             selectedSeats = selectedSeatNames.joinToString(","),
             totalPrice = totalPrice,
             onConfirmClick = {
                 if (seatCount > 0) {
-                    flight.Seats = selectedSeatNames.joinToString(",")
-                    flight.TotalPrice = totalPrice
-                    onConfirm(flight)
+                    if(seatCount == passengerCount) {
+                        flight.Seats = selectedSeatNames.joinToString(",")
+                        flight.TotalPrice = totalPrice
+                        onConfirm(flight)
+                    } else {
+                        Toast.makeText(context, "Please select enough seats", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(context, "Please select your seat", Toast.LENGTH_SHORT).show()
                 }
