@@ -8,4 +8,6 @@ data class UserModel(
     val fullName: String = "",
     val email: String = "",
     val role: String = "user"
-)
+) {
+
+}

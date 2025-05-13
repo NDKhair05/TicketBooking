@@ -26,7 +26,9 @@ class PaymentActivity : AppCompatActivity() {
                     },
                     onCancel = {
                         finish()
-                    }
+                    },
+                    userId = TODO(),
+                    bookingId = TODO()
                 )
             } else {
                 println("Flight Unvalid")

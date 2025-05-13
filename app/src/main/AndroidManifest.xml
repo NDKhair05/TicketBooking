@@ -12,6 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketBooking"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Activities.Admin.AdminActivity"
+            android:exported="false" />
+
+
+        <activity
+            android:name=".Activities.Admin.ApproveTicketsScreen"
+            android:exported="false" />
+
+        <activity
+            android:name=".Activities.Admin.UserListActivity"
+            android:exported="false" />
         <activity
             android:name=".Activities.PassengerInfo.PassengerInfoActivity"
             android:exported="false" />
@@ -41,7 +54,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
