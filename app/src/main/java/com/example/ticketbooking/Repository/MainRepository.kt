@@ -35,7 +35,7 @@ class MainRepository {
         return listData
     }
 
-    fun loadFiltered (from: String, to: String):LiveData<MutableList<FlightModel>> {
+    fun loadFiltered (from: String, to: String, depDate: String):LiveData<MutableList<FlightModel>> {
         val listData = MutableLiveData<MutableList<FlightModel>>()
         val ref = firebaseDatabase.getReference("Flights")
         val query: Query=ref.orderByChild("from").equalTo(from)
@@ -45,7 +45,7 @@ class MainRepository {
                 for (childSnapshot in snapshot.children) {
                     val list = childSnapshot.getValue(FlightModel::class.java)
                     if(list != null) {
-                        if(list.To == to) {
+                        if(list.To == to && list.Date ==depDate) {
                             lists.add(list)
                         }
                     }

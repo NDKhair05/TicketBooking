@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,6 +37,7 @@ import com.example.ticketbooking.Activities.Dashboard.DashboardScreen
 import com.example.ticketbooking.Activities.Dashboard.MyBottomBar
 import com.example.ticketbooking.Activities.Profile.ProfileScreen
 import com.example.ticketbooking.Activities.Splash.SplashActivity
+import com.example.ticketbooking.Activities.TicketHistory.TicketHistoryScreen
 import com.example.ticketbooking.Utils.UserPreferences
 import com.example.ticketbooking.ui.theme.TicketBookingTheme
 
@@ -67,9 +69,8 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier
                         .fillMaxSize()
-                ) {
-                    MainNavGraph(navController) {
-                        // khi logout từ ProfileScreen
+                ) { innerPadding ->
+                    MainNavGraph(navController, innerPadding) {
                         startActivity(Intent(this@MainActivity, SplashActivity::class.java))
                         finish()
                     }
@@ -80,16 +81,17 @@ class MainActivity : ComponentActivity() {
 
     enum class BottomNavScreen(val label: String) {
         Home("Home"),
-        Cart("Cart"),
-        Favorite("Favorite"),
+        Booked("Booked"),
+        Discovery("Discovery"),
         Order("Order")
     }
 
     @Composable
-    fun MainNavGraph(navController: NavHostController, onLogout: () -> Unit) {
+    fun MainNavGraph(navController: NavHostController, innerPadding: PaddingValues, onLogout: () -> Unit) {
         NavHost(navController, startDestination = BottomNavScreen.Home.name) {
             composable(BottomNavScreen.Home.name) { DashboardScreen() }
             composable(BottomNavScreen.Order.name) { ProfileScreen(onLogout) }
+            composable(BottomNavScreen.Booked.name) { TicketHistoryScreen(innerPadding) }
             // Thêm Cart, Favorite nếu có
         }
     }

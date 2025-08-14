@@ -23,12 +23,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import com.example.ticketbooking.R
 import com.example.ticketbooking.Utils.UserPreferences
 import com.example.ticketbooking.ui.theme.TicketBookingTheme
 import android.content.Intent
-import com.example.ticketbooking.Activities.Admin.UserListActivity
+import com.example.ticketbooking.Activities.Admin.AddFlight.AddFlightActivity
+import com.example.ticketbooking.Activities.Admin.FlightCheck.FlightManagementActivity
+import com.example.ticketbooking.Activities.Admin.FlightCheck.FlightManagementScreen
+import com.example.ticketbooking.Activities.Splash.SplashActivity
 
 class AdminActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +57,16 @@ class AdminActivity : ComponentActivity() {
                             startActivity(intent)
                         },
                         onAddFlight = {
-
+                            val intent = Intent(this, AddFlightActivity::class.java)
+                            startActivity(intent)
+                        },
+                        onFlightCheck = {
+                            val intent = Intent(this, FlightManagementActivity::class.java)
+                            startActivity(intent)
+                        },
+                        onBackClick = {
+                            val intent = Intent(this, SplashActivity::class.java)
+                            startActivity(intent)
                         }
                     )
                 }
@@ -69,7 +80,9 @@ fun AdminScreen(
     adminName: String,
     onApproveTickets: () -> Unit,
     onManageUsers: () -> Unit,
-    onAddFlight: () -> Unit
+    onAddFlight: () -> Unit,
+    onFlightCheck: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -107,10 +120,11 @@ fun AdminScreen(
             AdminActionButton("📋 Duyệt vé", onApproveTickets)
             AdminActionButton("👤 Quản lý người dùng", onManageUsers)
             AdminActionButton("✈️ Thêm chuyến bay", onAddFlight)
+            AdminActionButton("✈ Quản lý chuyến bay", onFlightCheck)
+            AdminActionButton("Đăng xuất", onBackClick)
         }
 
         // Thanh điều hướng dưới cùng
-        BottomNavigationBar()
     }
 }
 

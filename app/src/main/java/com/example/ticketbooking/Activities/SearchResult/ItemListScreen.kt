@@ -31,22 +31,24 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.ticketbooking.R
 import com.example.ticketbooking.ViewModel.MainViewModel
+import java.sql.Date
 
 @Composable
 fun ItemListScreen(
     from: String,
     to: String,
+    depDate: String,
     numPassenger: Int,
     numAdultPassenger: Int,
     numKidPassenger: Int,
     viewModel: MainViewModel,
     onBackClick: () -> Unit
 ) {
-    val items by viewModel.loadFiltered(from, to).observeAsState(emptyList())
+    val items by viewModel.loadFiltered(from, to, depDate).observeAsState(emptyList())
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(from, to) {
-        viewModel.loadFiltered(from, to)
+        viewModel.loadFiltered(from, to, depDate)
     }
     LaunchedEffect(items) {
         isLoading = items.isEmpty()

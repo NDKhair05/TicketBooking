@@ -58,7 +58,7 @@ fun ProfileScreen(
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(R.color.orange),
-                modifier = Modifier.padding(bottom = 24.dp)
+                modifier = Modifier.padding(bottom = 24.dp, top = 30.dp)
             )
 
             user?.let {

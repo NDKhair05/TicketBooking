@@ -11,6 +11,7 @@ class SearchResultActivity : AppCompatActivity() {
     private val viewModel = MainViewModel()
     private var from: String = ""
     private var to: String = ""
+    private var depDate: String = ""
     private var numPassenger: Int = 1
     private var numAdultPassenger: Int = 1
     private var numKidPassenger: Int = 0
@@ -21,6 +22,7 @@ class SearchResultActivity : AppCompatActivity() {
 
         from = intent.getStringExtra("from")?:""
         to = intent.getStringExtra("to")?:""
+        depDate = intent.getStringExtra("depDate")?: ""
         numPassenger = intent.getIntExtra("numPassenger", 1)
         numAdultPassenger = intent.getIntExtra("numAdultPassenger", 1)
         numKidPassenger = intent.getIntExtra("numKidPassenger", 0)
@@ -31,6 +33,7 @@ class SearchResultActivity : AppCompatActivity() {
             ItemListScreen(
                 from = from,
                 to = to,
+                depDate = depDate,
                 numPassenger = numPassenger,
                 numAdultPassenger = numAdultPassenger,
                 numKidPassenger = numKidPassenger,

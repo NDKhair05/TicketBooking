@@ -36,9 +36,13 @@ import com.example.ticketbooking.R
 import java.util.Locale
 
 @Composable
-fun DatePickerScreen(modifier: Modifier = Modifier) {
+fun DatePickerScreen(
+    modifier: Modifier = Modifier,
+    depDate: String,
+    onDepDateChange: (String) -> Unit
+) {
     val context = LocalContext.current
-    val dateFormat = remember { SimpleDateFormat("dd / MM / yyyy", Locale.getDefault())  }
+    val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())  }
 
     val departureCalendar = remember { Calendar.getInstance() }
     val returnCalendar = remember { Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, 1) } }
@@ -49,9 +53,9 @@ fun DatePickerScreen(modifier: Modifier = Modifier) {
     Row {
         DatePickerItem(
             modifier,
-            dateText = departureDate,
+            dateText = depDate,
             onDateSelected = {selectedDate ->
-                departureDate = selectedDate
+                onDepDateChange(selectedDate)
             }, dateFormat = dateFormat,
             calendar = departureCalendar,
             context = context

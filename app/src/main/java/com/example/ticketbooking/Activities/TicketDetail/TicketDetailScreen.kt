@@ -14,7 +14,14 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -28,15 +35,20 @@ import com.example.ticketbooking.Domain.FlightModel
 import com.example.ticketbooking.Domain.FlightsBookingModel
 import com.example.ticketbooking.R
 import com.example.ticketbooking.ViewModel.FlightBookingViewModel
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun TicketDetailScreen(
     booking: FlightsBookingModel,
     onBackClick: () -> Unit,
     onConfirmBookingClick: () -> Unit,
-    flightBookingViewModel: FlightBookingViewModel = FlightBookingViewModel()
 ) {
     val context = LocalContext.current
+    val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+    val formattedPrice = formatter.format(booking.flight.TotalPrice)
+    var showDialog by remember { mutableStateOf(false) }
+
 
     Box(
         modifier = Modifier
@@ -83,16 +95,31 @@ fun TicketDetailScreen(
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }) {
-                    GradientButton(onClick = {
-                        flightBookingViewModel.createBooking(booking) { success ->
-                            if (success) {
+                    GradientButton(
+                        onClick = { showDialog = true },
+                        text = "Confirm Booking")
+                }
+
+                if (showDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showDialog = false },
+                        title = { Text(text = "Confirm Flight") },
+                        text = { Text(text = "Total Price: $formattedPrice\nWould you like to proceed with this booking?") },
+                        confirmButton = {
+                            TextButton(onClick = {
                                 onConfirmBookingClick()
-                            } else {
-                                // Hiển thị lỗi nếu cần
-                                Toast.makeText(context, "Booking Failed", Toast.LENGTH_SHORT)
-                                    .show()                            }
+                                showDialog = false
+                                }
+                            ) {
+                                Text("Confirm")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showDialog = false }) {
+                                Text("Cancel")
+                            }
                         }
-                    } , text = "Confirm Booking with the cost: ${booking.flight.TotalPrice}")
+                    )
                 }
             }
 

@@ -12,9 +12,9 @@ class MainViewModel {
         return repository.loadLocation()
     }
 
-    fun loadFiltered(from: String, to: String) :
+    fun loadFiltered(from: String, to: String, depDate: String) :
             LiveData<MutableList<FlightModel>> {
-        return repository.loadFiltered(from, to)
+        return repository.loadFiltered(from, to, depDate)
     }
 }
 

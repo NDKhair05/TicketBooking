@@ -36,9 +36,7 @@ fun TicketDetailContent(
     seatNumber: String,
     booking: FlightsBookingModel,
 ) {
-    val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-    val totalPrice = booking.flight.TotalPrice
-    val formattedPrice = formatter.format(totalPrice)
+
     Column (modifier = Modifier
         .padding(24.dp)
         .background(color = colorResource(R.color.lightPurple),

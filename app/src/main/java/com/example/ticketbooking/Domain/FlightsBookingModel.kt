@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class FlightsBookingModel(
     val bookingId: String = "",
+    val userId: String = "",
     val passengers: List<PassengerInfo> = emptyList(),
     val flight: FlightModel = FlightModel(),
     val bookingDate: String = "",

@@ -61,6 +61,7 @@ import com.example.ticketbooking.Domain.FlightModel
 import com.example.ticketbooking.Domain.FlightsBookingModel
 import com.example.ticketbooking.Domain.PassengerInfo
 import com.example.ticketbooking.R
+import com.example.ticketbooking.Utils.UserPreferences
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -77,6 +78,9 @@ fun PassengerInfoScreen(
     val context = LocalContext.current
     val passengerForms = remember { mutableStateListOf<PassengerInfo>() }
     val allNationalities = listOf("Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Anguillan", "Antiguan and Barbudan", "Argentine", "Armenian", "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Belarusian", "Belgian", "Belizean", "Beninese", "Bermudian", "Bhutanese", "Bolivian", "Bosnian and Herzegovinian", "Botswanan", "Brazilian", "British", "British Virgin Islander", "Bruneian", "Bulgarian", "Burkinabé", "Burmese", "Burundian", "Cambodian", "Cameroonian", "Canadian", "Cape Verdean", "Caymanian", "Central African", "Chadian", "Chilean", "Chinese", "Colombian", "Comoran", "Congolese (Congo)", "Congolese (DRC)", "Cook Islander", "Costa Rican", "Croatian", "Cuban", "Cypriot", "Czech", "Danish", "Djiboutian", "Dominican", "Dutch", "East Timorese", "Ecuadorean", "Egyptian", "Emirati", "English", "Equatorial Guinean", "Eritrean", "Estonian", "Ethiopian", "Faroese", "Fijian", "Filipino", "Finnish", "French", "Gabonese", "Gambian", "Georgian", "German", "Ghanaian", "Greek", "Grenadian", "Guatemalan", "Guinean", "Guinea-Bissauan", "Guyanese", "Haitian", "Honduran", "Hungarian", "Icelander", "Indian", "Indonesian", "Iranian", "Iraqi", "Irish", "Israeli", "Italian", "Ivorian", "Jamaican", "Japanese", "Jordanian", "Kazakhstani", "Kenyan", "Kittitian and Nevisian", "Kuwaiti", "Kyrgyz", "Laotian", "Latvian", "Lebanese", "Liberian", "Libyan", "Liechtensteiner", "Lithuanian", "Luxembourger", "Macedonian", "Malagasy", "Malawian", "Malaysian", "Maldivian", "Malian", "Maltese", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Micronesian", "Moldovan", "Monacan", "Mongolian", "Montenegrin", "Moroccan", "Mozambican", "Myanmar (Burmese)", "Namibian", "Nauruan", "Nepalese", "New Zealander", "Nicaraguan", "Nigerian", "Nigerien", "North Korean", "Norwegian", "Omani", "Pakistani", "Palauan", "Palestinian", "Panamanian", "Papua New Guinean", "Paraguayan", "Peruvian", "Polish", "Portuguese", "Puerto Rican", "Qatari", "Romanian", "Russian", "Rwandan", "Saint Lucian", "Salvadoran", "Samoan", "San Marinese", "Sao Tomean", "Saudi", "Scottish", "Senegalese", "Serbian", "Seychellois", "Sierra Leonean", "Singaporean", "Slovakian", "Slovenian", "Solomon Islander", "Somali", "South African", "South Korean", "Spanish", "Sri Lankan", "Sudanese", "Surinamese", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajik", "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian and Tobagonian", "Tunisian", "Turkish", "Turkmen", "Tuvaluan", "Ugandan", "Ukrainian", "Uruguayan", "Uzbekistani", "Venezuelan", "Vietnamese", "Welsh", "Yemeni", "Zambian", "Zimbabwean")
+
+    val userPreferences = UserPreferences(context)
+    val currentUser = userPreferences.getUser()
 
     LaunchedEffect(passengerTypes, selectedSeats) {
         val newForms = passengerTypes.mapIndexed { index, isAdult ->
@@ -181,6 +185,7 @@ fun PassengerInfoScreen(
                             onValueChange = {
                                 passengerForms[index] = passenger.copy(identifyCardNumber = it)
                             },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -320,14 +325,17 @@ fun PassengerInfoScreen(
                     )
                     val totalPrice = passengerForms.size * (flight.Price ?: 0.0)
 
-                    val booking = FlightsBookingModel(
-                        bookingId = UUID.randomUUID().toString(),
-                        passengers = passengerForms,
-                        flight = flight,
-                        bookingDate = bookingDate,
-                        status = "Pending",
-                        totalPrice = totalPrice
-                    )
+                    val booking = currentUser?.let {
+                        FlightsBookingModel(
+                            bookingId = UUID.randomUUID().toString(),
+                            userId = it.uid,
+                            passengers = passengerForms,
+                            flight = flight,
+                            bookingDate = bookingDate,
+                            status = "Pending",
+                            totalPrice = totalPrice
+                        )
+                    }
 
                     val intent = Intent(context, TicketDetailActivity::class.java).apply {
                         putExtra("booking", booking)

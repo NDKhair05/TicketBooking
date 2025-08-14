@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FlightModel(
+    val flightId: String = "",
     var AirlineLogo: String = "",
     var AirlineName: String = "",
     var DepartureTime: String = "",

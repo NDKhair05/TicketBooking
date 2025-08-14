@@ -2,7 +2,9 @@ package com.example.ticketbooking.Activities.Dashboard
 
 import android.content.Intent
 import android.icu.text.CaseMap.Title
+import android.icu.util.Calendar
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +51,8 @@ import com.example.ticketbooking.Domain.LocationModel
 import com.example.ticketbooking.R
 import com.example.ticketbooking.Utils.UserPreferences
 import com.example.ticketbooking.ViewModel.MainViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 //class DashboardActivity : AppCompatActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +81,10 @@ fun DashboardScreen() {
     var adultPassenger:Int = 0
     var childrenPassenger:Int = 0
     val context = LocalContext.current
+
+    val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())  }
+    val departureCalendar = remember { Calendar.getInstance() }
+    var departureDate by remember { mutableStateOf(dateFormat.format(departureCalendar.time)) }
 
     val userPreferences = UserPreferences(context)
     val currentUser = userPreferences.getUser()
@@ -146,7 +154,12 @@ fun DashboardScreen() {
                         Spacer(modifier = Modifier.width(16.dp))
                         YellowTitle("Return Date", Modifier.weight(1f))
                     }
-                    DatePickerScreen(Modifier.weight(1f))
+                    DatePickerScreen(
+                        Modifier.weight(1f),
+                        depDate = departureDate,
+                        onDepDateChange = { newDate ->
+                        departureDate = newDate
+                    })
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -156,7 +169,7 @@ fun DashboardScreen() {
                     Row (modifier = Modifier.fillMaxWidth()) {
                         PassengerCounter(
                             title = "Adult",
-                            minPassenger = 1,
+                            minPassenger = 0,
                             modifier = Modifier.weight(1f),
                             onItemSelected = { adultPassenger = it }
                         )
@@ -191,14 +204,19 @@ fun DashboardScreen() {
 
                     GradientButton(
                         onClick = {
-                            val intent = Intent(context, SearchResultActivity::class.java).apply {
-                                putExtra("from", from)
-                                putExtra("to", to)
-                                putExtra("numPassenger", adultPassenger+childrenPassenger)
-                                putExtra("numAdultPassenger", adultPassenger)
-                                putExtra("numKidPassenger", childrenPassenger)
+                            if (adultPassenger != 0) {
+                                val intent = Intent(context, SearchResultActivity::class.java).apply {
+                                    putExtra("from", from)
+                                    putExtra("to", to)
+                                    putExtra("depDate", departureDate)
+                                    putExtra("numPassenger", adultPassenger+childrenPassenger)
+                                    putExtra("numAdultPassenger", adultPassenger)
+                                    putExtra("numKidPassenger", childrenPassenger)
+                                }
+                                startActivity(context, intent, null)
+                            } else {
+                                Toast.makeText(context,"Please enter your passenger quantity", Toast.LENGTH_SHORT).show()
                             }
-                            startActivity(context, intent, null)
                         },
                         text = "Search"
                     )

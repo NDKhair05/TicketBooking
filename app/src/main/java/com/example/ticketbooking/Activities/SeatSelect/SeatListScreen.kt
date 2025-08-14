@@ -195,33 +195,30 @@ fun SeatListScreen(
 
 
 
-fun  generateSeatList(flight: FlightModel): List<Seat> {
+fun generateSeatList(flight: FlightModel): List<Seat> {
     val seatList = mutableListOf<Seat>()
-    val numberSeat = flight.NumberSeat + (flight.NumberSeat / 7) + 1
     val seatAlphabetMap = mapOf(
-        0 to "A",
-        1 to "B",
-        2 to "C",
-        4 to "D",
-        5 to "E",
-        6 to "F",
-        )
+        0 to "A", 1 to "B", 2 to "C",
+        4 to "D", 5 to "E", 6 to "F"
+    )
 
-    var row = 0
-    for(i in 0 until numberSeat) {
-        if (i%7 == 0) {
-           row++
-        }
-        if (i%7 == 3) {
-            seatList.add(Seat(SeatStatus.EMPTY, row.toString()))
-        } else {
-            val seatName = seatAlphabetMap[i % 7] + row
-            val seatStatus = if (flight.ReservedSeats.contains(seatName)) {
-                SeatStatus.UNAVAILABLE
-            } else {
-                SeatStatus.AVAILABLE
+    val numberOfRows = (flight.NumberSeat + 5) / 6 // mỗi hàng có 6 ghế
+    var seatCounter = 0
+
+    for (row in 1..numberOfRows) {
+        for (col in 0..6) {
+            if (col == 3) {
+                seatList.add(Seat(SeatStatus.EMPTY, "aisle"))
+            } else if (seatCounter < flight.NumberSeat) {
+                val seatName = seatAlphabetMap[col] + row
+                val seatStatus = if (flight.ReservedSeats.contains(seatName)) {
+                    SeatStatus.UNAVAILABLE
+                } else {
+                    SeatStatus.AVAILABLE
+                }
+                seatList.add(Seat(seatStatus, seatName))
+                seatCounter++
             }
-            seatList.add(Seat(seatStatus, seatName))
         }
     }
     return seatList
