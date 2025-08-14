@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <application
         android:allowBackup="true"
@@ -11,12 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketBooking"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".Activities.PassengerInfo.PassengerInfoActivity"
+            android:name=".Activities.Admin.FlightCheck.FlightManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.Profile.ProfileActivity"
+            android:name=".Activities.Admin.AddFlight.AddFlightActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Admin.AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Admin.ApproveTicketsScreen"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Admin.UserListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.PassengerInfo.PassengerInfoActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.Authentication.RegisterActivity"
@@ -34,11 +46,8 @@
             android:name=".Activities.SearchResult.SearchResultActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.Dashboard.DashboardActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.Splash.SplashActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -10,7 +10,5 @@ data class PassengerInfo(
     val identifyCardNumber: String? = null,
     val dateOfBirth: String = "",
     val nationality: String = "",
-    val email: String = "",
-    val phoneNumber: String = "",
     val seatNumber: String = ""
 ): Parcelable

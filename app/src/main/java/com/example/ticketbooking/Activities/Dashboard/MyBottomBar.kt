@@ -38,8 +38,8 @@ data class BottomMenuItem (
 fun prepareButtonMenu(): List<BottomMenuItem> {
     return listOf(
         BottomMenuItem(label = "Home", icon = painterResource(R.drawable.bottom_btn1)),
-        BottomMenuItem(label = "Cart", icon = painterResource(R.drawable.bottom_btn2)),
-        BottomMenuItem(label = "Favorite", icon = painterResource(R.drawable.bottom_btn3)),
+        BottomMenuItem(label = "Discovery", icon = painterResource(R.drawable.bottom_btn2)),
+        BottomMenuItem(label = "Booked", icon = painterResource(R.drawable.bottom_btn3)),
         BottomMenuItem(label = "Order", icon = painterResource(R.drawable.bottom_btn4))
         )
 }

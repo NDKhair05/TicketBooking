@@ -19,7 +19,6 @@ class TicketDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val booking = intent.getParcelableExtra<FlightsBookingModel>("booking")
-        val flightBookingViewModel = FlightBookingViewModel()
 
         setContent {
             StatusTopBarColor()
@@ -30,11 +29,10 @@ class TicketDetailActivity : AppCompatActivity() {
                     onBackClick = { finish() },
                     onConfirmBookingClick = {
                         val intent = Intent(this, PaymentActivity::class.java).apply {
-                            putExtra("flight", booking.flight)
+                            putExtra("booking", booking)
                         }
                         startActivity(intent)
                     },
-                    flightBookingViewModel = flightBookingViewModel
                 )
             }
         }
